@@ -1,0 +1,291 @@
+/* ========== Reset and Base Styles ========== */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body,
+html,
+#root {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #edf2f7; /* Light grayish blue */
+  color: #2d3748; /* Dark gray */
+}
+
+.min-h-screen {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ========== Header Bar ========== */
+.header-bar {
+  background: linear-gradient(90deg, #4f46e5, #6366f1);
+  color: #fff;
+  padding: 1rem 1.25rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 3px 8px rgb(79 70 229 / 0.5);
+  user-select: none;
+}
+
+.app-title {
+  margin: 0;
+  font-size: 1.75rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  line-height: 1.2;
+}
+
+/* ========== User Avatar ========== */
+.user-avatar {
+  display: flex;
+  align-items: center;
+  position: relative;
+  cursor: default;
+  outline-offset: 2px;
+  border-radius: 9999px;
+  width: 44px;
+  height: 44px;
+  flex-shrink: 0;
+  background: #4f46e5;
+  color: white;
+  font-weight: 700;
+  font-size: 1.1rem;
+  justify-content: center;
+  user-select: none;
+  transition: box-shadow 0.25s ease;
+}
+
+.user-avatar:focus {
+  outline: 3px solid #2563eb;
+  outline-offset: 3px;
+  box-shadow: 0 0 8px rgb(37 99 235 / 0.7);
+}
+
+.avatar-image {
+  width: 100%;
+  height: 100%;
+  border-radius: 9999px;
+  object-fit: cover;
+  display: block;
+  user-select: none;
+  pointer-events: none;
+}
+
+/* Logout button small X on avatar */
+.logout-button {
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  background: #ef4444;
+  border: none;
+  color: white;
+  width: 18px;
+  height: 18px;
+  font-weight: 700;
+  border-radius: 50%;
+  cursor: pointer;
+  line-height: 1;
+  font-size: 14px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0;
+  user-select: none;
+  transition: background-color 0.25s ease;
+}
+
+.logout-button:hover,
+.logout-button:focus {
+  background: #b91c1c;
+  outline: none;
+}
+
+/* ========== Navigation Menu ========== */
+.nav-menu {
+  margin: 2rem 0 1rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  justify-content: center;
+}
+
+.nav-button {
+  background-color: #4f46e5;
+  border: none;
+  border-radius: 12px;
+  color: white;
+  font-weight: 700;
+  padding: 0.65rem 1.4rem;
+  cursor: pointer;
+  transition: background-color 0.25s ease;
+  font-size: 1rem;
+  user-select: none;
+}
+
+.nav-button:hover,
+.nav-button:focus {
+  background-color: #4338ca;
+  outline: none;
+}
+
+/* ========== Status Cards Container ========== */
+.status-cards {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.5rem;
+  padding: 1.5rem 1rem;
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+@media (min-width: 600px) {
+  .status-cards {
+    grid-template-columns: repeat(3, 1fr);
+    padding: 2rem 2rem;
+  }
+}
+
+/* ========== Status Cards ========== */
+.status-card {
+  border-radius: 12px;
+  box-shadow: 0 8px 15px rgb(0 0 0 / 0.1);
+  padding: 1.8rem 1.6rem;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  cursor: default;
+  user-select: none;
+}
+
+.status-card:hover,
+.status-card:focus-within {
+  transform: translateY(-5px);
+  box-shadow: 0 15px 25px rgb(0 0 0 / 0.2);
+  outline: none;
+}
+
+.status-card.red {
+  background-color: #ef4444;
+  background-image: linear-gradient(135deg, #ef4444 0%, #b91c1c 100%);
+}
+
+.status-card.yellow {
+  background-color: #facc15;
+  background-image: linear-gradient(135deg, #facc15 0%, #ca8a04 100%);
+  color: #1a202c;
+}
+
+.status-card.blue {
+  background-color: #3b82f6;
+  background-image: linear-gradient(135deg, #3b82f6 0%, #1e40af 100%);
+}
+
+.status-card h3 {
+  font-size: 1.3rem;
+  font-weight: 600;
+  margin: 0 0 0.4rem;
+}
+
+.status-card p {
+  font-size: 2.8rem;
+  font-weight: 800;
+  line-height: 1;
+  margin: 0;
+  letter-spacing: 0.03em;
+  font-family: 'Segoe UI Variable', 'Segoe UI', sans-serif;
+}
+
+/* ========== Offline Banner ========== */
+.offline-banner {
+  background-color: #fee2e2;
+  color: #991b1b;
+  font-weight: 600;
+  text-align: center;
+  padding: 0.6rem 1rem;
+  margin: 0 0 1.5rem;
+  border-radius: 6px;
+  max-width: 900px;
+  margin-left: auto;
+  margin-right: auto;
+  box-shadow: 0 4px 6px rgb(185 28 28 / 0.3);
+  user-select: none;
+  outline-offset: 3px;
+}
+
+/* ========== Map Section ========== */
+.map-section {
+  padding: 0 1rem 3rem;
+  max-width: 1200px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+.map-section h2 {
+  font-size: 1.85rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+  color: #374151;
+}
+
+/* Leaflet map container override */
+.leaflet-container {
+  border-radius: 16px !important;
+  box-shadow: 0 12px 24px rgb(0 0 0 / 0.1);
+  height: 500px !important;
+  width: 100% !important;
+  z-index: 0;
+  transition: box-shadow 0.3s ease;
+  touch-action: pinch-zoom;
+  /* to help with mobile pinch zoom */
+}
+
+.leaflet-container:hover {
+  box-shadow: 0 18px 28px rgb(0 0 0 / 0.15);
+}
+
+/* Responsive map height */
+@media (max-width: 640px) {
+  .leaflet-container {
+    height: 350px !important;
+  }
+}
+
+/* ========== Feature Page Placeholder Styles ========== */
+.feature-page {
+  max-width: 900px;
+  margin: 2rem auto 3rem;
+  padding: 1rem 1.25rem;
+  background: white;
+  border-radius: 14px;
+  box-shadow: 0 10px 28px rgb(0 0 0 / 0.1);
+  text-align: center;
+  color: #374151;
+}
+
+.feature-page h2 {
+  margin-bottom: 1rem;
+  font-size: 1.9rem;
+}
+
+/* ========== Accessibility Helper Class ========== */
+.sr-only {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  padding: 0 !important;
+  margin: -1px !important;
+  overflow: hidden !important;
+  clip: rect(0, 0, 0, 0) !important;
+  white-space: nowrap !important;
+  border: 0 !important;
+}
