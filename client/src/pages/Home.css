@@ -241,7 +241,7 @@ html,
 .leaflet-container {
   border-radius: 16px !important;
   box-shadow: 0 12px 24px rgb(0 0 0 / 0.1);
-  height: 500px !important;
+  height: 400px !important;
   width: 100% !important;
   z-index: 0;
   transition: box-shadow 0.3s ease;

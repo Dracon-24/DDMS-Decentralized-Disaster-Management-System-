@@ -3,6 +3,8 @@ import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
 import "./Home.css";
+import { useNavigate } from "react-router-dom";
+import localDB from "../db/pouchdb";
 
 // Fix Leaflet icon URLs for build environments
 delete L.Icon.Default.prototype._getIconUrl;
@@ -16,10 +18,6 @@ L.Icon.Default.mergeOptions({
 const MAP_CENTER = [22.9734, 78.6569];
 
 // Sample disaster markers
-const disasterMarkers = [
-  { id: 1, type: "Flood", lat: 22.3, lng: 78.1, severity: "High" },
-  { id: 2, type: "Earthquake", lat: 23.3, lng: 79.1, severity: "Moderate" },
-];
 
 // === StatusCard Component ===
 function StatusCard({ title, count, color }) {
@@ -40,36 +38,42 @@ function StatusCard({ title, count, color }) {
 }
 
 // === UserAvatar Component ===
-function UserAvatar({ user, onLogout }) {
+function UserAvatar({ user, onLogout}) {
+  const navigate = useNavigate();
   return (
     <div className="user-avatar" tabIndex={0} aria-label={`Logged in as ${user.name}`}>
-      <img
-        src={user.profilePic}
-        alt={`${user.name}'s profile`}
-        className="avatar-image"
-      />
+      <button onClick={() => navigate("/Profile")} className="avatar-image">
+        <img
+          src={user.profilePic}
+          alt={`${user.name}'s profile`}
+          className="avatar-image"
+          style={{ cursor: "pointer" }}
+        />
+      </button>
       <button onClick={onLogout} className="logout-button" aria-label="Logout">
         &times;
       </button>
+
     </div>
   );
 }
 
 // === NavigationMenu Component ===
 function NavigationMenu({ onSelectPage }) {
+  const navigate = useNavigate();
   return (
     <nav className="nav-menu" aria-label="Main navigation">
       <button onClick={() => onSelectPage("safeRoute")} className="nav-button">
         Safe Route
       </button>
-      <button onClick={() => onSelectPage("reportSOS")} className="nav-button">
+      <button onClick={() => navigate("/ReportSOS")} className="nav-button">
         Report SOS
       </button>
-      <button onClick={() => onSelectPage("reportIncident")} className="nav-button">
-        Report Incident
+      <button onClick={() => navigate("/ReportDisaster")} className="nav-button">
+        Report Disaster
       </button>
       <button onClick={() => onSelectPage("reliefTracker")} className="nav-button">
-        Relief Resource Tracker
+        Report Resource Center
       </button>
     </nav>
   );
@@ -122,16 +126,17 @@ function ReliefTracker() {
 
 // === Main Home Component ===
 function Home() {
+  const navigate = useNavigate();
   const [isOnline, setIsOnline] = useState(navigator.onLine);
-  const [disastersCount] = useState(disasterMarkers.length);
+  const [disasters, setDisasters] = useState([]);
   const [alertsCount] = useState(7);
   const [sosActive] = useState(3);
   const [selectedPage, setSelectedPage] = useState(null);
 
   // Dummy logged-in user info with profile pic URL
   const dummyUser = {
-    name: "John Doe",
-    email: "john.doe@example.com",
+    name: "Kumar Manthan",
+    email: "kumar.manthan2023@vitstudent.ac.in",
     profilePic:
       "https://i.pravatar.cc/48?img=12", // Random avatar placeholder URL; replace as needed
   };
@@ -141,19 +146,20 @@ function Home() {
   const handleOffline = useCallback(() => setIsOnline(false), []);
 
   useEffect(() => {
-    window.addEventListener("online", handleOnline);
-    window.addEventListener("offline", handleOffline);
-    return () => {
-      window.removeEventListener("online", handleOnline);
-      window.removeEventListener("offline", handleOffline);
-    };
-  }, [handleOnline, handleOffline]);
+    async function fetchDisasters() {
+      try {
+        const result = await localDB.allDocs({ include_docs: true });
+        const docs = result.rows.map((row) => row.doc);
+        console.log("All disaster documents:", docs);
+        setDisasters(docs);
+      } catch (error) {
+        console.error("Failed to fetch disaster reports from local DB:", error);
+      }
+    }
+    fetchDisasters();
+  }, []);
 
-  // Logout clears "login" and resets to dashboard (you can enhance to fully remove user state)
-  const handleLogout = () => {
-    // For now, just alert and keep user logged in (to remove login later)
-    alert("Logout clicked - implement logout process here.");
-  };
+
 
   // Content switcher based on page selection
   let mainContent;
@@ -173,7 +179,7 @@ function Home() {
         <main className="status-cards" aria-label="Status Overview">
           <StatusCard
             title="Disasters Detected"
-            count={disastersCount}
+            count={disasters.length}
             color="red"
           />
           <StatusCard title="Active Alerts" count={alertsCount} color="yellow" />
@@ -204,15 +210,17 @@ function Home() {
               url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
               attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
             />
-            {disasterMarkers.map(({ id, lat, lng, type, severity }) => (
-              <Marker key={id} position={[lat, lng]}>
-                <Popup>
-                  <strong>{type}</strong>
-                  <br />
-                  Severity: {severity}
-                </Popup>
-              </Marker>
+            {disasters.filter(disaster => disaster.position && disaster.position.length === 2).map((disaster, idx) => (
+                <Marker key={idx} position={[disaster.position[0], disaster.position[1]]}>
+                  <Popup>
+                    <strong>{disaster.disasterType}</strong><br />
+                    Severity: {disaster.severity}<br />
+                    {disaster.description}
+                  </Popup>
+                </Marker>
             ))}
+
+
           </MapContainer>
           <p id="mapDesc" className="sr-only">
             Interactive map showing locations and severity levels of recent disasters.
@@ -227,7 +235,7 @@ function Home() {
       {/* Header with title and dummy user avatar */}
       <header className="header-bar">
         <h1 className="app-title">Decentralized Disaster Management System</h1>
-        <UserAvatar user={dummyUser} onLogout={handleLogout} />
+        <UserAvatar user={dummyUser}/>
       </header>
 
       {/* Main content */}

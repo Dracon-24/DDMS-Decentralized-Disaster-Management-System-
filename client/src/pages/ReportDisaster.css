@@ -1,0 +1,268 @@
+:root{
+  --bg-1: #081026;       /* main page background */
+  --bg-2: #071022;       /* form outer */
+  --panel: #071526;      /* inner panel */
+  --muted: #9fb0bf;      /* muted text */
+  --accent: #2aa6ff;     /* accent (unused heavy) */
+  --border: rgba(255,255,255,0.06);
+  --inset: rgba(15,30,40,0.6);
+  --card-width: 380px;   /* card width - change to suit JSX */
+}
+
+/* Page background & centering */
+html,body{
+  height:100%;
+  margin:0;
+  font-family: Inter, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  background:
+    radial-gradient(1200px 600px at 10% 10%, rgba(20,40,60,0.16), transparent 6%),
+    radial-gradient(900px 500px at 95% 90%, rgba(10,20,30,0.12), transparent 5%),
+    var(--bg-1);
+  color: #e6f0f6;
+  -webkit-font-smoothing:antialiased;
+  -moz-osx-font-smoothing:grayscale;
+}
+
+/* Main wrapper (adjust to your JSX container class) */
+.report-page,
+.report-form,
+.container {
+  display:block;
+  max-width: 100%;
+  padding: 28px 24px;
+}
+
+/* center the form card on the page (vertical padding creates similar visual) */
+.report-form .form-card,
+.form-card {
+  width: var(--card-width);
+  margin: 28px auto;
+  border-radius: 12px;
+  position: relative;
+  /* outer edge border + soft shadow */
+  border: 1px solid rgba(255,255,255,0.03);
+  box-shadow:
+    0 6px 30px rgba(5,12,18,0.85),
+    inset 0 1px 0 rgba(255,255,255,0.02);
+  background: linear-gradient(180deg, rgba(12,20,28,0.65), rgba(6,12,18,0.6));
+  overflow: visible;
+}
+
+/* inner darker panel with subtle inner border like screenshot */
+.form-card .card-inner,
+.card-inner {
+  background: linear-gradient(180deg, var(--panel), rgba(5,10,14,0.6));
+  margin: 12px;
+  padding: 18px;
+  border-radius: 9px;
+  border: 1px solid var(--border);
+  box-shadow: inset 0 0 0 1px rgba(0,0,0,0.25);
+}
+
+/* Title (top-left) */
+.form-card .title,
+.card-header,
+.form-header {
+  font-size: 20px;
+  font-weight: 700;
+  color: #e8f6ff;
+  margin: 0 0 12px 0;
+  letter-spacing: -0.2px;
+}
+
+/* Form groups */
+.form-group,
+.field {
+  margin-bottom: 16px;
+}
+
+/* Labels like "Disaster Type *" or "Location *" */
+.form-group label,
+.field label {
+  display:block;
+  font-size: 12px;
+  color: var(--muted);
+  margin-bottom: 8px;
+  font-weight:600;
+  letter-spacing: 0;
+}
+
+/* Inputs and select styling */
+input[type="text"],
+input[type="number"],
+select,
+textarea,
+.input,
+.form-control {
+  width: 100%;
+  box-sizing: border-box;
+  background: rgba(12,20,28,0.45);
+  border: 1px solid rgba(255,255,255,0.04);
+  color: #d9eefc;
+  padding: 10px 12px;
+  border-radius: 6px;
+  font-size: 14px;
+  outline: none;
+  transition: box-shadow .12s ease, border-color .12s ease, transform .06s;
+  -webkit-appearance:none;
+}
+
+/* Placeholder color */
+input::placeholder,
+textarea::placeholder,
+select::placeholder {
+  color: rgba(210,230,240,0.28);
+}
+
+/* On focus */
+input:focus,
+textarea:focus,
+select:focus {
+  border-color: rgba(60,120,180,0.30);
+  box-shadow: 0 6px 20px rgba(10,25,40,0.6), inset 0 1px 0 rgba(255,255,255,0.01);
+}
+
+/* Textarea specific (monospace-like look in screenshot) */
+textarea {
+  min-height: 110px;
+  resize: vertical;
+  font-family: "Roboto Mono", "Courier New", monospace;
+  letter-spacing: 0.3px;
+  line-height: 1.45;
+  color: #cfefff;
+  padding: 12px;
+}
+
+/* Fieldset-style border for Location group (shows small bordered rectangle) */
+.location-group,
+.fieldset-like {
+  padding: 8px;
+  border-radius: 4px;
+  border: 2px solid rgba(255,255,255,0.06);
+  background: linear-gradient(180deg, rgba(255,255,255,0.01), transparent 40%);
+}
+
+/* Map container */
+.map-wrapper,
+.map-container {
+  margin-top: 8px;
+  width: 100%;
+  border-radius: 8px;
+  overflow: hidden;
+  background: #edf6ff;
+  /* thin inner border like screenshot */
+  border: 4px solid rgba(5,8,12,0.5);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.02);
+}
+
+/* Leaflet container overrides so it fits the rounded card look */
+.leaflet-container,
+.map-wrapper .leaflet-container,
+.map-container .leaflet-container {
+  width: 100% !important;
+  height: 360px; /* matches screenshot tall map - adjust as necessary */
+  border-radius: 8px;
+  background: #e9f2f8;
+}
+
+/* Small auto-detect button above map */
+.detect-location-btn,
+.auto-locate {
+  display:block;
+  width:100%;
+  padding: 6px 8px;
+  font-size: 13px;
+  color: #08202e;
+  background: linear-gradient(180deg,#f3fbff,#e6f6ff);
+  border:1px solid rgba(0,0,0,0.08);
+  border-radius:4px;
+  text-align:center;
+  margin-bottom:8px;
+  cursor:pointer;
+}
+
+/* Small detail row under map that shows selected coordinates */
+.selected-location,
+.coordinates {
+  display:block;
+  margin-top:8px;
+  font-size:13px;
+  color: #b8cad4;
+  padding: 6px 4px;
+}
+
+/* Severity / numbers row as small input */
+.small-input {
+  width:100%;
+  max-width: 100%;
+}
+
+/* Button primary */
+.btn,
+.button,
+.primary {
+  display:inline-block;
+  background: linear-gradient(180deg,#0f93ff,#0c6fb8);
+  color: white;
+  border: none;
+  padding: 10px 14px;
+  border-radius: 6px;
+  font-weight:600;
+  cursor:pointer;
+  box-shadow: 0 8px 30px rgba(7,22,35,0.6);
+}
+
+/* small form help text or footers */
+.form-hint,
+.hint {
+  font-size:12px;
+  color: #6f8293;
+  margin-top: 6px;
+}
+
+/* Responsive - shrink card on small screens */
+@media (max-width: 480px){
+  :root{ --card-width: calc(100% - 32px); }
+  .leaflet-container{ height: 260px; }
+}
+
+/* Leaflet control tweaks to match screenshot aesthetics */
+.leaflet-control-zoom,
+.leaflet-bar {
+  box-shadow: 0 3px 10px rgba(0,0,0,0.6);
+  border-radius:6px;
+  overflow: hidden;
+  border:1px solid rgba(255,255,255,0.03);
+}
+.leaflet-control-zoom a {
+  width:32px;
+  height:28px;
+  line-height:28px;
+  text-align:center;
+  background: rgba(255,255,255,0.9);
+  color: #111;
+  font-weight:700;
+}
+.leaflet-control-zoom a:hover { background: #fff; }
+
+/* attribution smaller and softer (bottom-right small label) */
+.leaflet-control-attribution {
+  font-size: 11px;
+  color: rgba(10,20,30,0.8);
+  background: rgba(255,255,255,0.92);
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+
+/* subtle top-left form glow to mimic screenshot vibe */
+.form-card::before {
+  content: "";
+  position: absolute;
+  left: -6%;
+  top: -8%;
+  width: 40%;
+  height: 40%;
+  background: radial-gradient(closest-side, rgba(36,90,140,0.06), transparent 40%);
+  pointer-events:none;
+  border-radius: 50%;
+}
